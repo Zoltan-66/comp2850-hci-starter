@@ -40,12 +40,33 @@
 <hr>
 
 {# ====================== #}
+{#  Filter Tasks         #}
+{# ====================== #}
+<section aria-labelledby="filter-heading">
+  <h2 id="filter-heading">Filter tasks</h2>
+
+  <label for="task-filter">Filter by title</label>
+  <input
+    type="search"
+    id="task-filter"
+    name="q"
+    placeholder="Type to filter tasks (e.g., milk)"
+    aria-describedby="filter-hint"
+  >
+  <small id="filter-hint">
+    As you type, the task list below will update to show only tasks whose titles contain your search text.
+  </small>
+</section>
+
+<hr>
+
+{# ====================== #}
 {#  Task List            #}
 {# ====================== #}
 <section aria-labelledby="list-heading">
   <h2 id="list-heading">Current tasks ({{ tasks | length }})</h2>
 
-  {# Icon used only for decoration; hide from screen readers #}
+  {# Decorative icon: hidden from assistive tech #}
   <img
     src="/static/img/icon.png"
     width="16"
@@ -57,7 +78,7 @@
   <ul id="task-list">
     {% for task in tasks %}
       <li id="task-{{ task.id }}">
-        <span>{{ task.title }}</span>
+        <span class="task-title">{{ task.title }}</span>
 
         <form
           action="/tasks/{{ task.id }}/delete"
@@ -82,5 +103,38 @@
   </ul>
 </section>
 
+{# ====================== #}
+{#  Filter Script        #}
+{# ====================== #}
+<script>
+  (function () {
+    var input = document.getElementById('task-filter');
+    var list = document.getElementById('task-list');
+    if (!input || !list) return;
+
+    input.addEventListener('input', function () {
+      var query = this.value.toLowerCase();
+
+      var items = list.querySelectorAll('li');
+      items.forEach(function (li) {
+        var titleSpan = li.querySelector('.task-title');
+        if (!titleSpan) return;
+
+        var text = titleSpan.textContent.toLowerCase();
+
+        if (!query) {
+          // Empty query → show all tasks
+          li.style.display = '';
+        } else if (text.indexOf(query) !== -1) {
+          // Title contains query → show
+          li.style.display = '';
+        } else {
+          // Not matched → hide
+          li.style.display = 'none';
+        }
+      });
+    });
+  })();
+</script>
 
 {% endblock %}
