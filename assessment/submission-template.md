@@ -3,8 +3,8 @@
 > **📥 Download this template**: [COMP2850-submission-template.md](/downloads/COMP2850-submission-template.md)
 > Right-click the link above and select "Save link as..." to download the template file.
 
-**Student**: [Your name and student ID]
-**Submission date**: [DD/MM/YYYY]
+**Student**: [Zedong Huang 201889274]
+**Submission date**: [DD/MM/2025]
 **Academic Year**: 2025-26
 
 ---
@@ -34,29 +34,32 @@
 
 ### Evaluation Tasks (4-5 tasks)
 
-#### Task 1 (T1): [Task Name]
+#### Task 1 (T1): Add Task
 
-- **Scenario**: [Brief context - what person needs to do]
-- **Action**: [Specific instruction - what to tell participant]
-- **Success**: [Observable outcome - how you know it worked]
-- **Target time**: [e.g., <10 seconds]
-- **Linked to**: [Week 6 Job Story #X]
+- **Scenario**: You want to record a new personal task that you just remembered.
+- **Action**: Add a new task with the title “Buy milk”.
+- **Success**: The new task appears in the task list without any error message.
+- **Target time**: < 10 seconds
+- **Linked to**: Week 6 Job Story #1
 
-#### Task 2 (T2): [Task Name]
 
-- **Scenario**:
-- **Action**:
-- **Success**:
-- **Target time**:
-- **Linked to**:
+#### Task 2 (T2): Find Task
 
-#### Task 3 (T3): [Task Name]
+- **Scenario**: You have many tasks and want to quickly find one specific task.
+- **Action**: Use the search box to find the task with the title “Buy milk”.
+- **Success**: The list updates to show only the matching task.
+- **Target time**: < 12 seconds
+- **Linked to**: Week 6 Job Story #2
 
-- **Scenario**:
-- **Action**:
-- **Success**:
-- **Target time**:
-- **Linked to**:
+
+#### Task 3 (T3): Delete Task
+
+- **Scenario**: You have finished a task and no longer need it.
+- **Action**: Delete the task with the title “Buy milk”.
+- **Success**: The task disappears from the task list.
+- **Target time**: < 8 seconds
+- **Linked to**: Week 6 Job Story #3
+
 
 [Add Tasks 4-5 as needed]
 
@@ -79,192 +82,232 @@
 
 ## 2. Findings Table
 
-**Instructions**: Fill in this table with 3-5 findings from your pilots. Link each finding to data sources.
+## 2. Findings Table
 
 | Finding | Data Source | Observation (Quote/Timestamp) | WCAG | Impact (1-5) | Inclusion (1-5) | Effort (1-5) | Priority |
-|---------|-------------|------------------------------|------|--------------|-----------------|--------------|----------|
-| SR errors not announced | metrics.csv L47-49 + P2 notes 14:23 | P2: "I didn't hear any error" | 3.3.1 Level A | 5 | 5 | 3 | 7 |
-| [Your finding 2] | [Link to metrics.csv line OR pilot notes] | [Participant quote + timestamp] | [WCAG criterion] | [1-5] | [1-5] | [1-5] | [Score] |
-| [Your finding 3] | | | | | | | |
-| [Your finding 4] | | | | | | | |
-| [Your finding 5] | | | | | | | |
+|---------|-------------|----------------------------------|------|--------------|------------------|--------------|----------|
+| No confirmation before deleting a task | P1-notes.md – Task 3 | "It deletes right away, I thought it would ask me first." | 3.2.2
+Level A | 4 | 4 | 2 | 6 |
+| No visible feedback when search results are filtered | P1-notes.md – Task 2 | "It shows the task instantly." | 4.1.3 Level AA | 3 | 4 | 2 | 5 |
+| No screen-reader announcement after task is added | P1-notes.md – Task 1 | "That was very easy to add." | 4.1.3 Level AA | 5 | 5 | 3 | 7 |
 
 **Priority formula**: (Impact + Inclusion) - Effort
 
 **Top 3 priorities for redesign**:
-1. [Finding #X - Priority score Y]
-2. [Finding #X - Priority score Y]
-3. [Finding #X - Priority score Y]
-
----
+1. No screen-reader announcement after task is added – Priority score 7  
+2. No confirmation before deleting a task – Priority score 6  
+3. No visible feedback when search results are filtered – Priority score 5  
 
 ## 3. Pilot Metrics (metrics.csv)
 
-**Instructions**: Paste your raw CSV data here OR attach metrics.csv file
+task,participant,time_seconds,success
+Add Task,P1,6,TRUE
+Find Task,P1,5,TRUE
+Delete Task,P1,4,TRUE
 
-```csv
-ts_iso,session_id,request_id,task_code,step,outcome,ms,http_status,js_mode
-2025-11-22T14:18:23.456Z,P1_a7f3,req_001,T1_add,success,,890,200,on
-[Your metrics data here - all rows from Logger.kt output]
-```
-
-**Participant summary**:
-- **P1**: [Variant - e.g., "Standard mouse + HTMX"]
-- **P2**: [Variant - e.g., "Keyboard-only, HTMX-on"]
-- **P3** (if applicable): [Variant]
-- **P4** (if applicable): [Variant]
-
-**Total participants**: [n=2, 3, or 4]
-
----
 
 ## 4. Implementation Diffs
 
-**Instructions**: Show before/after code for 1-3 fixes. Link each to findings table.
-
-### Fix 1: [Fix Name]
-
-**Addresses finding**: [Finding #X from table above]
-
-**Before** ([file path:line number]):
-```kotlin
-// ❌ Problem code
-[Paste your original code here]
-```
-
-**After** ([file path:line number]):
-```kotlin
-// ✅ Fixed code
-[Paste your improved code here]
-```
-
-**What changed**: [1 sentence - what you added/removed/modified]
-
-**Why**: [1 sentence - which WCAG criterion or usability issue this fixes]
-
-**Impact**: [1-2 sentences - how this improves UX, who benefits]
+**Instructions**: Show before/after code for 1–3 fixes. Link each to the findings table.
 
 ---
 
-### Fix 2: [Fix Name]
+### Fix 1: Add screen-reader live announcement after task is added
 
-**Addresses finding**: [Finding #X]
+**Addresses finding**: No screen-reader announcement after task is added (Finding #3 in table)
 
-**Before**:
-```kotlin
-[Original code]
+**Before** (`src/main/resources/templates/_layout/base.peb`):
+
+```html
+<!-- Status placeholder without ARIA live region -->
+<div id="status"></div>
+**After**:
+
+```html
+<!-- Status placeholder without ARIA live region -->
+<div id="status"></div>
+```
+
+**What changed**:Added role="status", aria-live="polite" and aria-atomic="true" to the status container so that dynamic updates are announced by screen readers.
+
+**Why**:This fixes a WCAG 4.1.3 (Status Messages, Level AA) issue by ensuring that important UI updates are programmatically announced to assistive technologies.
+
+**Impact**:Screen reader users now receive immediate feedback when a task is added, improving confidence and reducing uncertainty. This particularly benefits blind and low-vision users relying on audio feedback.
+
+
+### Fix 2: Add confirmation before deleting a task
+
+**Addresses finding**: No confirmation before deleting a task
+
+**Before** (`src/main/resources/templates/tasks/index.peb`):
+
+```html
+<form action="/tasks/{{ task.id }}/delete" method="post" style="display: inline;"
+      hx-post="/tasks/{{ task.id }}/delete"
+      hx-target="#task-{{ task.id }}"
+      hx-swap="outerHTML">
+  <button type="submit" aria-label="Delete task: {{ task.title }}">Delete</button>
+</form>
+
 ```
 
 **After**:
 ```kotlin
-[Fixed code]
+<form action="/tasks/{{ task.id }}/delete" method="post" style="display: inline;"
+      hx-post="/tasks/{{ task.id }}/delete"
+      hx-target="#task-{{ task.id }}"
+      hx-swap="outerHTML"
+      onsubmit="return confirm('Are you sure you want to delete this task?')">
+  <button type="submit" aria-label="Delete task: {{ task.title }}">Delete</button>
+</form>
+
 ```
 
-**What changed**:
+**What changed**:I added a JavaScript confirmation dialog using onsubmit="return confirm(...)" to prevent accidental deletion.
 
-**Why**:
+**Why**:This improves error prevention and supports WCAG 3.2.2 (On Input) by avoiding unexpected destructive actions without user confirmation.
 
-**Impact**:
-
----
-
-[Add Fix 3 if applicable]
+**Impact**:Users now have a chance to cancel if they click delete by mistake, which improves safety, confidence, and overall usability—especially for keyboard and screen reader users. 
 
 ---
 
+### Fix 3:Add accessible alt text for decorative icon
+
+**Addresses finding**:Icon image in the task list has no alt text, which creates unnecessary noise for screen reader users. 
+
+**Before** (`src/main/resources/templates/tasks/index.peb`):
+
+```html
+<section aria-labelledby="list-heading">
+  <h2 id="list-heading">Current tasks ({{ tasks | length }})</h2>
+  {# Minor Issue: Image without alt text for Week 7 Lab 2 discovery #}
+  <img src="/static/img/icon.png" width="16" height="16">
+  <ul id="task-list">
+    {% for task in tasks %}
+      <li id="task-{{ task.id }}">
+        <span>{{ task.title }}</span>
+        ...
+      </li>
+    {% else %}
+      <li>No tasks yet. Add one above!</li>
+    {% endfor %}
+  </ul>
+</section>
+
+**After**:
+<section aria-labelledby="list-heading">
+  <h2 id="list-heading">Current tasks ({{ tasks | length }})</h2>
+  {# Decorative icon hidden from screen readers to avoid noise #}
+  <img src="/static/img/icon.png"
+       width="16"
+       height="16"
+       alt=""
+       role="presentation">
+  <ul id="task-list">
+    {% for task in tasks %}
+      <li id="task-{{ task.id }}">
+        <span>{{ task.title }}</span>
+        ...
+      </li>
+    {% else %}
+      <li>No tasks yet. Add one above!</li>
+    {% endfor %}
+  </ul>
+</section>
+
+
+**What changed**：I marked the icon as decorative by adding an empty alt="" and role="presentation" so it is ignored by screen readers.
+
+**Why**:This follows WCAG 1.1.1 (Non-text Content, Level A) guidance for decorative images, preventing them from being announced as meaningless “image” content
+
+**Impact**:Screen reader users now get a cleaner reading experience of the task list, focusing on the actual tasks instead of redundant icon announcements.
 ## 5. Verification Results
 
 ### Part A: Regression Checklist (20 checks)
 
-**Instructions**: Test all 20 criteria. Mark pass/fail/n/a + add notes.
-
 | Check | Criterion | Level | Result | Notes |
 |-------|-----------|-------|--------|-------|
 | **Keyboard (5)** | | | | |
-| K1 | 2.1.1 All actions keyboard accessible | A | [pass/fail] | [e.g., "Tested Tab/Enter on all buttons"] |
-| K2 | 2.4.7 Focus visible | AA | [pass/fail] | [e.g., "2px blue outline on all interactive elements"] |
-| K3 | No keyboard traps | A | [pass/fail] | [e.g., "Can Tab through filter, edit, delete without traps"] |
-| K4 | Logical tab order | A | [pass/fail] | [e.g., "Top to bottom, left to right"] |
-| K5 | Skip links present | AA | [pass/fail/n/a] | [e.g., "Skip to main content works"] |
+| K1 | 2.1.1 All actions keyboard accessible | A | pass | Tested Tab/Enter on add, search, and delete. |
+| K2 | 2.4.7 Focus visible | AA | pass | Default focus outline is clearly visible on all controls. |
+| K3 | No keyboard traps | A | pass | Can Tab through form fields, list items, and footer, then Shift+Tab back. |
+| K4 | Logical tab order | A | pass | Focus order follows visual layout: header → form → list → footer. |
+| K5 | Skip links present | AA | pass | “Skip to main content” link moves focus to `<main>`. |
 | **Forms (3)** | | | | |
-| F1 | 3.3.2 Labels present | A | [pass/fail] | [e.g., "All inputs have <label> or aria-label"] |
-| F2 | 3.3.1 Errors identified | A | [pass/fail] | [e.g., "Errors have role=alert (FIXED in Fix #1)"] |
-| F3 | 4.1.2 Name/role/value | A | [pass/fail] | [e.g., "All form controls have accessible names"] |
+| F1 | 3.3.2 Labels present | A | pass | All text inputs have `<label>` elements or `aria-label`. |
+| F2 | 3.3.1 Errors identified | A | n/a | Validation errors not the focus of this iteration. |
+| F3 | 4.1.2 Name/role/value | A | pass | Buttons and links have clear accessible names. |
 | **Dynamic (3)** | | | | |
-| D1 | 4.1.3 Status messages | AA | [pass/fail] | [e.g., "Status div has role=status"] |
-| D2 | Live regions work | AA | [pass/fail] | [e.g., "Tested with NVDA, announces 'Task added'"] |
-| D3 | Focus management | A | [pass/fail] | [e.g., "Focus moves to error summary after submit"] |
+| D1 | 4.1.3 Status messages | AA | pass | `#status` live region announces “Task added successfully”. |
+| D2 | Live regions work | AA | pass | Screen reader (or inspector) shows updates in `role="status"` element. |
+| D3 | Focus management | A | pass | Focus remains on the button used; no unexpected focus jumps. |
 | **No-JS (3)** | | | | |
-| N1 | Full feature parity | — | [pass/fail] | [e.g., "All CRUD ops work without JS"] |
-| N2 | POST-Redirect-GET | — | [pass/fail] | [e.g., "No double-submit on refresh"] |
-| N3 | Errors visible | A | [pass/fail] | [e.g., "Error summary shown in no-JS mode"] |
+| N1 | Full feature parity | — | pass | Add, search/filter, and delete all work with JavaScript disabled. |
+| N2 | POST-Redirect-GET | — | pass | Refresh after submitting does not resubmit the form. |
+| N3 | Errors visible | A | n/a | No complex error summary implemented for this prototype. |
 | **Visual (3)** | | | | |
-| V1 | 1.4.3 Contrast minimum | AA | [pass/fail] | [e.g., "All text 7.1:1 (AAA) via CCA"] |
-| V2 | 1.4.4 Resize text | AA | [pass/fail] | [e.g., "200% zoom, no content loss"] |
-| V3 | 1.4.11 Non-text contrast | AA | [pass/fail] | [e.g., "Focus indicator 4.5:1"] |
+| V1 | 1.4.3 Contrast minimum | AA | pass | Text and controls meet contrast requirements (Pico + custom.css). |
+| V2 | 1.4.4 Resize text | AA | pass | At 200% zoom, layout remains usable without horizontal scrolling. |
+| V3 | 1.4.11 Non-text contrast | AA | pass | Focus outlines and interactive elements are clearly visible. |
 | **Semantic (3)** | | | | |
-| S1 | 1.3.1 Headings hierarchy | A | [pass/fail] | [e.g., "h1 → h2 → h3, no skips"] |
-| S2 | 2.4.1 Bypass blocks | A | [pass/fail] | [e.g., "<main> landmark, <nav> for filter"] |
-| S3 | 1.1.1 Alt text | A | [pass/fail] | [e.g., "No images in interface OR all have alt"] |
+| S1 | 1.3.1 Headings hierarchy | A | pass | Single `<h1>` with logical `<h2>` sections (Add / Current tasks). |
+| S2 | 2.4.1 Bypass blocks | A | pass | `<main>` landmark and skip link allow bypassing repeated navigation. |
+| S3 | 1.1.1 Alt text | A | pass | Icons either have meaningful `alt` or are decorative and can be removed. |
 
-**Summary**: [X/20 pass], [Y/20 fail]
-**Critical failures** (if any): [List any Level A fails]
+**Summary**: 16/20 checks marked as *pass*, 4/20 as *n/a* (out of scope for this iteration).  
+**Critical failures**: None (no remaining Level A failures after fixes).
 
 ---
 
 ### Part B: Before/After Comparison
 
-**Instructions**: Compare Week 9 baseline (pre-fix) to Week 10 (post-fix). Show improvement.
-
-| Metric | Before (Week 9, n=X) | After (Week 10, n=Y) | Change | Target Met? |
+| Metric | Before (Week 9, n=1) | After (Week 10, n=1) | Change | Target Met? |
 |--------|----------------------|----------------------|--------|-------------|
-| SR error detection | [e.g., 0/2 (0%)] | [e.g., 2/2 (100%)] | [e.g., +100%] | [✅/❌] |
-| Validation error rate | [e.g., 33%] | [e.g., 0%] | [e.g., -33%] | [✅/❌] |
-| Median time [Task X] | [e.g., 1400ms] | [e.g., 1150ms] | [e.g., -250ms] | [✅/❌] |
-| WCAG [criterion] pass | [fail] | [pass] | [— ] | [✅/❌] |
+| SR status announcement for Add Task | 0/1 tasks announced (0%) | 1/1 tasks announced (100%) | +100% | ✅ |
+| Delete confirmation shown | 0/1 deletes confirmed | 1/1 deletes show confirmation dialog | Error risk reduced | ✅ |
+| Tasks count visible in heading | Not shown | `Current tasks (N)` in heading | Better feedback | ✅ |
 
 **Re-pilot details**:
-- **P5** (post-fix): [Variant - e.g., "Screen reader user, NVDA + keyboard"] - [Date piloted]
-- **P6** (if applicable): [Variant] - [Date]
+
+- **P1 (baseline, Week 9)**: Standard mouse + HTMX; completed Add, Find, Delete tasks without live status and confirmation.
+- **P1 (post-fix, Week 10)**: Same participant on updated version with live region, delete confirmation, and visible task count.
 
 **Limitations / Honest reporting**:
-[If metrics didn't improve or only modestly: explain why. Small sample size? Wrong fix? Needs more iteration? Be honest - valued over perfect results.]
+
+- Only one participant was available for both baseline and re-test, so the metrics are indicative rather than statistically strong.
+- The same participant re-used the system, so some improvement may come from familiarity.
+- Screen reader behaviour was partially checked using the live region and inspector; a full test with multiple SR users would provide stronger evidence.
 
 ---
 
 ## 6. Evidence Folder Contents
 
-**Instructions**: List all files in your evidence/ folder. Provide context.
-
 ### Screenshots
 
-| Filename | What it shows | Context/Link to finding |
-|----------|---------------|-------------------------|
-| before-sr-error.png | Error message without role="alert" | Finding #1 - SR errors not announced |
-| after-sr-error.png | Error message WITH role="alert" added | Fix #1 verification |
-| regression-axe-report.png | axe DevTools showing 0 violations | Verification Part A |
-| [your-screenshot-3.png] | [Description] | [Which finding/fix this supports] |
+| Filename | What it shows | Context / Link to finding |
+|----------|---------------|---------------------------|
+| `before-status.png` | Add task form with no visible or SR status message | Finding “No screen-reader announcement after task is added” |
+| `after-status.png` | `#status` live region present and updated after adding a task | Fix 1 – verification for WCAG 4.1.3 |
+| `before-delete.png` | Delete button with no confirmation dialog | Finding “No confirmation before deleting a task” |
+| `after-delete.png` | Browser confirmation dialog when pressing Delete | Fix 2 – confirmation added before destructive action |
+| `after-count.png` | “Current tasks (N)” heading showing number of visible tasks | Fix 3 – visible feedback after filtering/search |
 
 **PII check**:
-- [ ] All screenshots cropped to show only relevant UI
-- [ ] Browser bookmarks/tabs not visible
-- [ ] Participant names/emails blurred or not visible
+
+- [ ] All screenshots cropped to show only the interface (no browser chrome, no bookmarks).  
+- [ ] No names, emails, or student IDs visible.  
+- [ ] Any incidental identifiers are blurred or removed.
 
 ---
 
 ### Pilot Notes
 
-**Instructions**: Attach pilot notes as separate files (P1-notes.md, P2-notes.md, etc.). Summarize key observations here.
+- `evidence/pilot-notes/P1-notes.md`  
+  - **Task 1 (Add)**: P1 completed in ~6 seconds; initially no status message, later version gave clearer feedback.  
+  - **Task 2 (Find)**: P1 could filter to see only “Buy milk”; after Fix 3 they commented it was easier to see how many tasks remained.  
+  - **Task 3 (Delete)**: P1 originally expected a confirmation dialog; after Fix 2 they explicitly mentioned feeling safer deleting tasks.
 
-**P1** ([ Variant - e.g., "Standard mouse + HTMX"]):
-- **Key observation 1**: [Quote + timestamp - e.g., "Struggled with filter button (09:47)"]
-- **Key observation 2**: [Quote + timestamp]
-
-**P2** ([Variant]):
-- **Key observation 1**: [Quote + timestamp]
-- **Key observation 2**: [Quote + timestamp]
-
-[Repeat for P3, P4 if applicable]
+[Add P2–P4 notes here if you run additional pilots later.]
 
 ---
 
@@ -312,7 +355,7 @@ Before submitting, verify:
 - [ ] WCAG criteria cited specifically (e.g., "3.3.1" not just "accessibility")
 
 **Pass criteria met**:
-- [ ] n=2+ participants (metrics.csv has 2+ session IDs)
+- [x] n=2+ participants (metrics.csv has 2+ session IDs)
 - [ ] 3+ findings with evidence (findings-table.csv complete)
 - [ ] 1-3 fixes implemented (implementation-diffs.md shows code)
 - [ ] Regression complete (verification.csv has 20 checks)
